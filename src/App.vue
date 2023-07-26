@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    Visão da câmera
+    <CameraRecordingFm/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import CameraRecordingFm from './components/CameraRecordingFm.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    CameraRecordingFm
   }
 }
 </script>
