@@ -1,20 +1,12 @@
 <template>
   <div id="app">
-    Visão da câmera
-    <CameraRecordingFm/>
+    <nav>
+      <router-link to="/">FM-CAM</router-link> |
+      <router-link to="/about">About</router-link>
+    </nav>
+    <router-view/>
   </div>
 </template>
-
-<script>
-import CameraRecordingFm from './components/CameraRecordingFm.vue'
-
-export default {
-  name: 'App',
-  components: {
-    CameraRecordingFm
-  }
-}
-</script>
 
 <style>
 #app {
@@ -23,6 +15,18 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+nav {
+  padding: 30px;
+}
+
+nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+nav a.router-link-exact-active {
+  color: #42b983;
 }
 </style>
