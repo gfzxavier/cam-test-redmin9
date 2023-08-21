@@ -1,10 +1,18 @@
 <template>
   <div class="camera-recording-fm">
-    <video id="video" playsinline autoplay loop></video>
+    <div class="video-and-info">
+      <video id="video" playsinline autoplay loop></video>
+    </div>
     <div class="buttons">
       <button @click="toggleRecord">{{ buttonText }}</button>
       <button @click="changeCam">Alternar câmera</button>
     </div>
+    <p>
+      <span>
+        MIME:<br>
+      </span>
+      {{ usedMime }}
+    </p>
   </div>
 </template>
 
@@ -24,7 +32,13 @@ export default {
       stream: null,
       isRecording: false,
       mediaRecorder: null,
-      recordedBlobs: []
+      recordedBlobs: [],
+
+      usedMime: 'video/webm;codecs=vp9,opus',
+
+      mimesList: [
+        
+      ]
     }
   },
   beforeMount(){
@@ -78,7 +92,6 @@ export default {
           facingMode: this.frontalCamera ? 'user' : 'environment',
           aspectRatio: this.isMobile ? 16 / 9 : 9 / 16
         },
-        mimeType: 'video/webm'
       }
     },
     verifyDevice() {
@@ -102,8 +115,11 @@ export default {
       }
       this.isRecording = true
       this.mediaRecorder = new MediaRecorder(this.stream);
+      // console.log(this.stream)
       this.mediaRecorder.start()
+      // console.log(this.mediaRecorder)
       this.mediaRecorder.ondataavailable = event => {
+        console.log(event)
         if (event.data && event.data.size > 0) {
           this.recordedBlobs.push(event.data)
           this.playRecordedVideo()
@@ -117,13 +133,14 @@ export default {
       this.initCamera()
     },
     playRecordedVideo() {
-      const superBuffer = new Blob(this.recordedBlobs, { type: 'video/mp4' })
+      const superBuffer = new Blob(this.recordedBlobs)
       this.stopCamera()
       this.videoTagNode.src = null
       this.videoTagNode.srcObject = null
       this.videoTagNode.src = window.URL.createObjectURL(superBuffer)
       this.videoTagNode.controls = true
       this.videoTagNode.play()
+      console.log(superBuffer)
     },
     stopRecording() {
       this.mediaRecorder.stop()
@@ -144,5 +161,11 @@ export default {
 }
 .buttons {
   margin: 0 auto;
+}
+.video-and-info{
+  display: flex;
+}
+span {
+  font-weight: 700;
 }
 </style>

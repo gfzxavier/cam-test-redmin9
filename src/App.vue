@@ -1,8 +1,7 @@
 <template>
   <div id="app">
     <nav>
-      <router-link to="/">FM-CAM</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/">FM-CAM</router-link>
     </nav>
     <router-view/>
   </div>

@@ -7,6 +7,11 @@
       <button @click="toggleRecord">{{ buttonText }}</button>
       <button @click="changeCam">Alternar câmera</button>
     </div>
+    <div class="mimes-menu">
+      <button @click="changeMime(false)">-</button>
+      Nº{{usedMimeIndex + 1}}
+      <button @click="changeMime(true)">+</button>
+    </div>
     <p>
       <span>
         MIME:<br>
@@ -34,7 +39,24 @@ export default {
       mediaRecorder: null,
       recordedBlobs: [],
 
-      usedMime: 'video/webm;codecs=vp9,opus',
+      usedMimeIndex: 0,
+
+      mimesList: [
+        'video/webm;codecs=vp8',
+        'video/webm;codecs=vp9',
+        'video/webm;codecs=vp8.0',
+        'video/webm;codecs=vp9.0',
+        'video/webm;codecs=h264',
+        'video/webm;codecs=H264',
+        'video/webm;codecs=avc1',
+        'video/webm;codecs=vp8,opus',
+        'video/webm;codecs=VP8,OPUS',
+        'video/webm;codecs=vp9,opus', 
+        'video/webm;codecs=vp8,vp9,opus',
+        'video/webm;codecs=h264,opus',
+        'video/webm;codecs=h264,vp9,opus',
+        'video/x-matroska;codecs=avc1'
+      ]
     }
   },
   beforeMount(){
@@ -51,6 +73,9 @@ export default {
         return 'Gravar' 
       }
       return 'Parar gravação'
+    },
+    usedMime() {
+      return this.mimesList[this.usedMimeIndex]
     }
   },
   methods: {
@@ -130,7 +155,7 @@ export default {
       this.initCamera()
     },
     playRecordedVideo() {
-      const superBuffer = new Blob(this.recordedBlobs, { type: this.usedMime })
+      const superBuffer = new Blob(this.recordedBlobs)
       this.stopCamera()
       this.videoTagNode.src = null
       this.videoTagNode.srcObject = null
@@ -141,6 +166,18 @@ export default {
     },
     stopRecording() {
       this.mediaRecorder.stop()
+    },
+    changeMime(isNext){
+      if(isNext && this.usedMimeIndex + 1 < this.mimesList.length) {
+        this.usedMimeIndex ++
+      } else if(!isNext && this.usedMimeIndex > 0) {
+        this.usedMimeIndex --
+      }
+      this.mediaRecorder = null
+      this.stream = null
+      this.recordedBlobs = []
+      this.setCameraConfig()
+      this.initCamera()
     }
   }
 }
@@ -161,6 +198,7 @@ export default {
 }
 .video-and-info{
   display: flex;
+  justify-content: center;
 }
 span {
   font-weight: 700;
